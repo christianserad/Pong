@@ -13,7 +13,7 @@ public class KeyPressed {
     private boolean pressed;
 
     /**
-     * Initialize the keycode of this key
+     * This method initializes the KeyCode of this key
      *
      * @param code
      */
@@ -22,16 +22,16 @@ public class KeyPressed {
     }
 
     /**
-     * gets the keycode of this key
+     * This method returns the KeyCode of this key
      *
-     * @return the keycode
+     * @return the KeyCode
      */
     public KeyCode getCode() {
         return code;
     }
 
     /**
-     * Determine if the key is pressed
+     * This method determines if the key is pressed
      *
      * @return true if pressed, otherwise false
      */
@@ -40,7 +40,7 @@ public class KeyPressed {
     }
 
     /**
-     * Set the key to pressed
+     * This method set the key to pressed
      *
      * @param pressed
      */

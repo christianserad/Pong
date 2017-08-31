@@ -53,7 +53,6 @@ public class Rectangle1 extends GameObject {
                     }
 
                     if (pressed(KeyCode.LEFT) && getX() < 0) {
-                        Game.displayStage("stage1");
                         speed = 0;
                     }
 

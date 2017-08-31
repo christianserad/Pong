@@ -19,7 +19,7 @@ public class GameStage extends Parent {
     }
 
     /**
-     * Add game objects into the stage at the start of the game
+     * This method adds GameObjects into the stage
      *
      * @param object
      */
@@ -32,7 +32,7 @@ public class GameStage extends Parent {
     }
 
     /**
-     * Gets the object from the stage
+     * This method returns the GameObject from this stage
      *
      * @param name
      * @return the game object
@@ -47,7 +47,7 @@ public class GameStage extends Parent {
     }
 
     /**
-     * get all the objects from the stage
+     * This method returns all the GameObjects from this stage
      *
      * @return the objects from the stage
      */
@@ -63,7 +63,7 @@ public class GameStage extends Parent {
     public String getName() {
         return name;
     }
-    
+
     /**
      * This method starts or display the GameStage with running GameObjects
      */
@@ -73,7 +73,7 @@ public class GameStage extends Parent {
         }
         setVisible(true);
     }
-    
+
     /**
      * This method pauses or stops the GameObjects inside the GameStage
      */
@@ -83,11 +83,11 @@ public class GameStage extends Parent {
         }
         setVisible(true);
     }
-    
+
     /**
      * This method closes the GameStage while stopping the GameObjects
      */
-    public void close(){
+    public void close() {
         for (int i = 0; i < objectList.size(); i++) {
             objectList.get(i).setDefault();
             objectList.get(i).stop();

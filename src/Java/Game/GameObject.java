@@ -2,6 +2,7 @@ package Java.Game;
 
 import java.util.ArrayList;
 import javafx.animation.Animation;
+import javafx.animation.Transition;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -10,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 /**
  * An abstract class that has a a standard property of a game object
@@ -20,17 +22,17 @@ public abstract class GameObject extends Parent {
 
     //default properties
     private String defaultImageURL;
+    private String[] defaultAnimationURL;
     private double defaultY;
     private double defaultX;
 
     //current properties
     private String name;
     private Animation animation;
+    private String[] imageAnimationURL;
     private String imageURL;
 
     //Events
-    private boolean keyPressed;
-    private KeyEvent keyEvent;
     private static boolean keyEventInitialized;
     private static ArrayList<KeyPressed> keyPressedList = new ArrayList<KeyPressed>();
     private boolean mouseHover;
@@ -44,16 +46,27 @@ public abstract class GameObject extends Parent {
     }
 
     public GameObject(String name, String imageURL, double coordinateX, double coordinateY) {
-        //default values
+        this(name, coordinateX, coordinateY);
         defaultImageURL = imageURL;
+        setImage(imageURL);
+
+    }
+
+    public GameObject(String name, String[] imageAnimationURL, double coordinateX, double coordinateY) {
+        this(name, coordinateX, coordinateY);
+        defaultAnimationURL = imageAnimationURL;
+        setAnimation(imageAnimationURL);
+
+    }
+
+    public GameObject(String name, double coordinateX, double coordinateY) {
+        //default values
         defaultX = coordinateX;
         defaultY = coordinateY;
 
         this.name = name;
-        this.imageURL = imageURL;
         setX(coordinateX);
         setY(coordinateY);
-        getChildren().add(new ImageView(new Image(imageURL)));
 
         //initializing events
         setMouseHoverEvent();
@@ -82,7 +95,7 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Set the X coordinate of the object
+     * This method sets the X coordinate of the GameObject
      *
      * @param coordinateX
      */
@@ -92,7 +105,7 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Set the Y coordinate of the object
+     * This method sets the Y coordinate of the GameObject
      *
      * @param coordinateY
      */
@@ -102,6 +115,8 @@ public abstract class GameObject extends Parent {
     }
 
     /**
+     * This method returns the X coordinate of the GameObject
+     *
      * @return the X coordinate
      */
     public double getX() {
@@ -109,6 +124,8 @@ public abstract class GameObject extends Parent {
     }
 
     /**
+     * This method returns the Y coordinate of the GameObject
+     *
      * @return the Y coordinate
      */
     public double getY() {
@@ -116,36 +133,67 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Set the animation of the object
+     * This method sets or initializes the animation of the object
      *
      * @param animation
      */
-    public void setAnimation(Animation animation) {
-        this.animation = animation;
+    public void setAnimation(String[] imageAnimationURL) {
+        this.imageAnimationURL = imageAnimationURL;
+        animation = new Transition() {
+            {
+                setCycleDuration(Duration.millis(2000));
+            }
+            int frame = 0;
+
+            @Override
+            protected void interpolate(double frac) {
+                if (frame >= imageAnimationURL.length) {
+                    frame = 0;
+                }
+                getChildren().clear();
+                ImageView imageFrame = new ImageView(new Image(imageAnimationURL[frame]));
+                getChildren().add(imageFrame);
+                frame++;
+            }
+        };
+        animation.setCycleCount(animation.INDEFINITE);
+        animation.play();
     }
 
     /**
-     * Activates the animation
+     * This method activates the animation
      */
     public void playAnimation() {
         animation.play();
     }
 
     /**
-     * @return the animation of the object
+     * This method stops the animation
      */
-    public Animation getAnimation() {
-        return animation;
+    public void stopAnimation() {
+        animation.stop();
     }
 
     /**
-     * @return return the height of the object
+     * This method sets the speed of the animation
+     */
+    public void setSpeedAnimation(double speed) {
+        speed *= 0.001;
+        animation.setRate(speed);
+    }
+
+    /**
+     * This method returns the Height of the GameObject
+     *
+     * @return return the height of the GameObject
      */
     public double getHeight() {
         return getBoundsInParent().getHeight();
     }
 
     /**
+     * This the method returns the width of the GameObject
+     *
      * @return the width of the object
      */
     public double getWidth() {
@@ -153,7 +201,7 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Move the object horizontally by the speed
+     * This method moves the GameObject horizontally by the speed
      *
      * @param speed
      */
@@ -162,7 +210,7 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Move the object vertically by the speed
+     * This method moves the GameObject vertically by the speed
      *
      * @param speed
      */
@@ -171,18 +219,19 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * @return the name of the object
+     * This method returns the name of the GameObject
+     *
+     * @return the name of the GameObject
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Determine if the object is meeting an object to left according to the
-     * distance
+     * This method determines the distance to the left between this GameObject and other GameObject
      *
      * @param distance
-     * @return true if object meets other object in the left otherwise false
+     * @return the distance
      */
     public double leftMeet(int distance) {
         return leftMeet(distance, null);
@@ -221,11 +270,10 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Determine if the object is meeting an object to right according to the
-     * distance
+     * This method determines the distance to the right between this GameObject and other GameObject
      *
      * @param distance
-     * @return true if object meets other object in the right otherwise false
+     * @return the distance
      */
     public double rightMeet(int distance) {
         return rightMeet(distance, null);
@@ -265,11 +313,10 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Determine if the object is meeting an object to top according to the
-     * distance
+     * This method determines the distance to the top between this GameObject and other GameObject
      *
      * @param distance
-     * @return true if object meets other object in the top otherwise false
+     * @return the distance
      */
     public double topMeet(int distance) {
         return topMeet(distance, null);
@@ -309,11 +356,10 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Determine if the object is meeting an object to bottom according to the
-     * distance
+     * This method determines the distance to the bottom between this GameObject and other GameObject
      *
      * @param distance
-     * @return true if object meets other object in the bottom otherwise false
+     * @return the distance
      */
     public double bottomMeet(int distance) {
         return bottomMeet(distance, null);
@@ -381,7 +427,7 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * Determines if the given key is pressed
+     * This method determines if the given key is pressed
      *
      * @param code
      * @return true if the key is pressed otherwise false
@@ -422,7 +468,7 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * This method determines if the mouse is hovering in the GameObject
+     * This method determines if the mouse is hovering inside the GameObject
      *
      * @return true if mouse hovers, otherwise false
      */
@@ -450,28 +496,31 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * This method determines if the mouse clicked a specific GameObject
+     * This method determines if the mouse clicked this GameObject
      *
-     * @return true if the mouse clicked the GameObject, otherwise falseF
+     * @return true if the mouse clicked the GameObject, otherwise false
      */
     public boolean mouseClick() {
         return mouseClick;
     }
 
     /**
-     * This method modifies the GameObject to its default properties
+     * This method sets the GameObject to its default properties
      */
     public void setDefault() {
-        imageURL = defaultImageURL;
-        getChildren().clear();
-        getChildren().add(new ImageView(defaultImageURL));
+        if (defaultImageURL != null) {
+            setImage(defaultImageURL);
+        }
+        if (defaultAnimationURL != null) {
+            setAnimation(defaultAnimationURL);
+        }
         setX(defaultX);
         setY(defaultY);
     }
 
     /**
      * Activates the object Override this method to subclasses and add distinct
-     * behavioral code with animation timer
+     * behavioral code with AnimationTimer
      */
     public abstract void run();
 

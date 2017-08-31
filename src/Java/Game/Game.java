@@ -7,7 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 
 /**
- * Root of the Game Application which includes all necessary GameObjects and
+ * This class is the root of the Game Application which includes all necessary GameObjects and
  * GameStages
  *
  * @author Christian Romar Paul Serad
