@@ -25,6 +25,8 @@ public abstract class GameObject extends Parent {
     private String defaultImageURL;
     private String[] defaultAnimationURL;
     private String defaultSpriteSheetURL;
+    private int defaultSpriteSheetFrameWidth;
+    private int defaultSpriteSheetFrameHeight;
     private double defaultY;
     private double defaultX;
 
@@ -65,6 +67,8 @@ public abstract class GameObject extends Parent {
     public GameObject(String name, String spriteSheetURL, int width, int height, double coordinateX, double coordinateY) {
         this(name, coordinateX, coordinateY);
         defaultSpriteSheetURL = spriteSheetURL;
+        defaultSpriteSheetFrameWidth = width;
+        defaultSpriteSheetFrameHeight = height;
         setAnimation(spriteSheetURL, width, height);
     }
 
@@ -577,8 +581,11 @@ public abstract class GameObject extends Parent {
         if (defaultImageURL != null) {
             setImage(defaultImageURL);
         }
-        if (defaultAnimationURL != null) {
+        else if (defaultAnimationURL != null) {
             setAnimation(defaultAnimationURL);
+        }
+        else if (defaultSpriteSheetURL != null) {
+            setAnimation(defaultSpriteSheetURL, defaultSpriteSheetFrameWidth, defaultSpriteSheetFrameHeight);
         }
         setX(defaultX);
         setY(defaultY);
