@@ -1,4 +1,4 @@
-package Java.Game;
+package christian.game2d;
 
 import java.util.ArrayList;
 import javafx.scene.Parent;
@@ -43,7 +43,7 @@ public class GameStage extends Parent {
                 return objectList.get(i);
             }
         }
-        return null;
+        throw new GameErrorException("GameObject " + name + " not found");
     }
 
     /**

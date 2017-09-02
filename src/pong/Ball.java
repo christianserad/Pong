@@ -5,8 +5,8 @@
  */
 package pong;
 
-import Java.Game.Game;
-import Java.Game.GameObject;
+import christian.game2d.Game;
+import christian.game2d.GameObject;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 
@@ -22,10 +22,16 @@ public class Ball extends GameObject {
         super(name, node);
     }
 
-
-
     public Ball(String name, String imageURL, double coordinateX, double coordinateY) {
         super(name, imageURL, coordinateX, coordinateY);
+    }
+    
+    public Ball(String name, String spriteSheetURL, int width, int height, double coordinateX, double coordinateY) {
+        super(name, spriteSheetURL, width, height, coordinateX, coordinateY);
+    }
+    
+    public Ball(String name, String[] imageAnimationURL, double coordinateX, double coordinateY) {
+        super(name, imageAnimationURL, coordinateX, coordinateY);
     }
     
 

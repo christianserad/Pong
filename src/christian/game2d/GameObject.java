@@ -1,9 +1,10 @@
-package Java.Game;
+package christian.game2d;
 
 import java.util.ArrayList;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -23,6 +24,7 @@ public abstract class GameObject extends Parent {
     //default properties
     private String defaultImageURL;
     private String[] defaultAnimationURL;
+    private String defaultSpriteSheetURL;
     private double defaultY;
     private double defaultX;
 
@@ -30,6 +32,7 @@ public abstract class GameObject extends Parent {
     private String name;
     private Animation animation;
     private String[] imageAnimationURL;
+    private String spriteSheetURL;
     private String imageURL;
 
     //Events
@@ -58,8 +61,14 @@ public abstract class GameObject extends Parent {
         setAnimation(imageAnimationURL);
 
     }
+    
+    public GameObject(String name, String spriteSheetURL, int width, int height, double coordinateX, double coordinateY) {
+        this(name, coordinateX, coordinateY);
+        defaultSpriteSheetURL = spriteSheetURL;
+        setAnimation(spriteSheetURL, width, height);
+    }
 
-    public GameObject(String name, double coordinateX, double coordinateY) {
+    private GameObject(String name, double coordinateX, double coordinateY) {
         //default values
         defaultX = coordinateX;
         defaultY = coordinateY;
@@ -133,12 +142,16 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * This method sets or initializes the animation of the object
+     * This method sets or initializes the animation of the object using an
+     * array of imageURL
      *
-     * @param animation
+     * @param imageAnimationURL array of image URL
      */
     public void setAnimation(String[] imageAnimationURL) {
         this.imageAnimationURL = imageAnimationURL;
+        getChildren().clear();
+        ImageView imageFrame = new ImageView();
+        getChildren().add(imageFrame);
         animation = new Transition() {
             {
                 setCycleDuration(Duration.millis(2000));
@@ -150,10 +163,56 @@ public abstract class GameObject extends Parent {
                 if (frame >= imageAnimationURL.length) {
                     frame = 0;
                 }
-                getChildren().clear();
-                ImageView imageFrame = new ImageView(new Image(imageAnimationURL[frame]));
-                getChildren().add(imageFrame);
+                imageFrame.setImage(new Image(imageAnimationURL[frame]));
                 frame++;
+            }
+        };
+        animation.setCycleCount(animation.INDEFINITE);
+        animation.play();
+    }
+
+    /**
+     * This method sets or initializes the animation of the object using a
+     * sprite sheet
+     *
+     * @param spriteSheetURL an images URL for sprite sheet
+     * @param width the width of every frame in sprite sheet
+     * @param height the height of every frame in sprite sheet
+     */
+    public void setAnimation(String spriteSheetURL, int width, int height) {
+        Image spriteSheet = new Image(spriteSheetURL);
+        if (spriteSheet.getWidth() % width != 0 || spriteSheet.getHeight() % height != 0) {
+            throw new GameErrorException("Sprite Sheet frames are not " + width + "x" + height);
+        }
+        this.spriteSheetURL = spriteSheetURL;
+        getChildren().clear();
+        ImageView spriteSheetView = new ImageView(spriteSheet);
+        getChildren().add(spriteSheetView);
+        animation = new Transition() {
+            {
+                setCycleDuration(Duration.millis(2000));
+            }
+            int x = 0;
+            int y = 0;
+
+            @Override
+            protected void interpolate(double frac) {
+                if (x < spriteSheet.getWidth()) {
+                    spriteSheetView.setViewport(new Rectangle2D(x, y, width, height));
+                    x += width;
+                } else {
+                    x = 0;
+                    y += height;
+                    if (y < spriteSheet.getHeight()) {
+                        spriteSheetView.setViewport(new Rectangle2D(x, y, width, height));
+                        x += width;
+                    } else {
+                        y = 0;
+                        spriteSheetView.setViewport(new Rectangle2D(x, y, width, height));
+                        x += width;
+                    }
+                }
+
             }
         };
         animation.setCycleCount(animation.INDEFINITE);
@@ -178,6 +237,9 @@ public abstract class GameObject extends Parent {
      * This method sets the speed of the animation
      */
     public void setSpeedAnimation(double speed) {
+        if (speed < 0) {
+            throw new GameErrorException("Animation speed should be greater then zero");
+        }
         speed *= 0.001;
         animation.setRate(speed);
     }
@@ -203,7 +265,7 @@ public abstract class GameObject extends Parent {
     /**
      * This method moves the GameObject horizontally by the speed
      *
-     * @param speed
+     * @param speed the speed it moves
      */
     public void moveX(double speed) {
         setX(getX() + speed);
@@ -212,7 +274,7 @@ public abstract class GameObject extends Parent {
     /**
      * This method moves the GameObject vertically by the speed
      *
-     * @param speed
+     * @param speed the speed it moves
      */
     public void moveY(double speed) {
         setY(getY() + speed);
@@ -228,10 +290,11 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * This method determines the distance to the left between this GameObject and other GameObject
+     * This method determines the distance to the left between this GameObject
+     * and other GameObject
      *
-     * @param distance
-     * @return the distance
+     * @param distance the checking distance
+     * @return the distance between GameObjects
      */
     public double leftMeet(int distance) {
         return leftMeet(distance, null);
@@ -270,10 +333,11 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * This method determines the distance to the right between this GameObject and other GameObject
+     * This method determines the distance to the right between this GameObject
+     * and other GameObject
      *
-     * @param distance
-     * @return the distance
+     * @param distance the checking distance
+     * @return the distance between GameObjects
      */
     public double rightMeet(int distance) {
         return rightMeet(distance, null);
@@ -313,10 +377,11 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * This method determines the distance to the top between this GameObject and other GameObject
+     * This method determines the distance to the top between this GameObject
+     * and other GameObject
      *
-     * @param distance
-     * @return the distance
+     * @param distance the checking distance
+     * @return the distance between GameObjects
      */
     public double topMeet(int distance) {
         return topMeet(distance, null);
@@ -356,10 +421,11 @@ public abstract class GameObject extends Parent {
     }
 
     /**
-     * This method determines the distance to the bottom between this GameObject and other GameObject
+     * This method determines the distance to the bottom between this GameObject
+     * and other GameObject
      *
-     * @param distance
-     * @return the distance
+     * @param distance the checking distance
+     * @return the distance between GameObjects
      */
     public double bottomMeet(int distance) {
         return bottomMeet(distance, null);

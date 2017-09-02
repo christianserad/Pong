@@ -5,7 +5,7 @@
  */
 package pong;
 
-import Java.Game.GameObject;
+import christian.game2d.GameObject;
 import javafx.scene.control.Label;
 
 /**
@@ -24,13 +24,15 @@ public class LabelObject extends GameObject{
 
     
 
+
+
     @Override
-    public void run() {
+    public void stop() {
         
     }
 
     @Override
-    public void stop() {
+    public void run() {
         
     }
     

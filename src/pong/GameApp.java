@@ -1,8 +1,8 @@
 package pong;
 
 
-import Java.Game.Game;
-import Java.Game.GameStage;
+import christian.game2d.Game;
+import christian.game2d.GameStage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -36,15 +36,16 @@ public class GameApp extends Application {
         //Put all the initialized game objects here
         
         //Main Menu
-        GameStage stage = new GameStage("stage");
+        GameStage stage = new GameStage("stage");  
         
         ButtonStart buttonStart = new ButtonStart("button","pong/images/start.png", 200, 230);
+        
         stage.addObject(buttonStart);
         
         //stage1
         GameStage stage1 = new GameStage("stage1");
         
-        Ball ball = new Ball("ball","pong/images/ball.png", 250, 250);
+        Ball ball = new Ball("ball","pong/images/ball.png", 250, 250); 
         Rectangle2 rec2 = new Rectangle2("rec1","pong/images/rectangle1.png", 200, 25);
         Rectangle1 rec1 = new Rectangle1("rec1","pong/images/rectangle2.png", 200, 475);
 

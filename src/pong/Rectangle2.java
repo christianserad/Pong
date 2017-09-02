@@ -5,9 +5,9 @@
  */
 package pong;
 
-import Java.Game.Game;
-import Java.Game.GameObject;
-import Java.Game.KeyPressed;
+import christian.game2d.Game;
+import christian.game2d.GameObject;
+import christian.game2d.KeyPressed;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -28,6 +28,13 @@ public class Rectangle2 extends GameObject {
         super(name, imageURL, coordinateX, coordinateY);
     }
     
+    public Rectangle2(String name, String spriteSheetURL, int width, int height, double coordinateX, double coordinateY) {
+        super(name, spriteSheetURL, width, height, coordinateX, coordinateY);
+    }
+    
+    public Rectangle2(String name, String[] imageAnimationURL, double coordinateX, double coordinateY) {
+        super(name, imageAnimationURL, coordinateX, coordinateY);
+    }
     
 
     @Override

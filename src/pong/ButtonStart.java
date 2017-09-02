@@ -1,7 +1,7 @@
 package pong;
 
-import Java.Game.Game;
-import Java.Game.GameObject;
+import christian.game2d.Game;
+import christian.game2d.GameObject;
 import javafx.animation.AnimationTimer;
 import javafx.scene.shape.Shape;
 
@@ -20,7 +20,7 @@ public class ButtonStart extends GameObject {
     public ButtonStart(String name, String imageURL, double coordinateX, double coordinateY) {
         super(name, imageURL, coordinateX, coordinateY);
     }
-
+    
 
     @Override
     public void run() {

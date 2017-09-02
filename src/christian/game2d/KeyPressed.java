@@ -1,4 +1,4 @@
-package Java.Game;
+package christian.game2d;
 
 import javafx.scene.input.KeyCode;
 

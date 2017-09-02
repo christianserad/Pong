@@ -1,4 +1,4 @@
-package Java.Game;
+package christian.game2d;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -29,7 +29,7 @@ public class Game extends Parent {
                 return gameStage.get(i);
             }
         }
-        return null;
+        throw new GameErrorException("GameStage " + name + " not found");
     }
 
     /**
@@ -66,13 +66,20 @@ public class Game extends Parent {
      * @param stageName
      */
     public static void displayStage(String stageName) {
+        boolean stageNameExist = false;
         for (int i = 0; i < gameStage.size(); i++) {
             if (gameStage.get(i).getName().equals(stageName)) {
                 gameStage.get(i).start();
+                stageNameExist = true;
             } else {
                 gameStage.get(i).close();
             }
         }
+
+        if(!stageNameExist){
+           throw new GameErrorException("GameStage " + stageName + " not found"); 
+        }
+        
     }
 
     /**
